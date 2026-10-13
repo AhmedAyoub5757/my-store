@@ -1,0 +1,343 @@
+/* ==========================================================================
+   Testimonials widget
+   ========================================================================== */
+.ms-testi {
+  /* Defaults. Elementor controls override these. */
+  --ms-testi-bg: transparent;
+  --ms-testi-eyebrow: var(--ms-color-accent);
+  --ms-testi-heading: var(--ms-color-ink);
+  --ms-testi-card-bg: var(--ms-color-sand);
+  --ms-testi-mark: var(--ms-color-accent);
+  --ms-testi-star: var(--ms-color-accent);
+  --ms-testi-quote: var(--ms-color-text);
+  --ms-testi-name: var(--ms-color-ink);
+  --ms-testi-role: var(--ms-color-muted);
+  --ms-testi-initial-bg: var(--ms-color-ink);
+  --ms-testi-initial-text: #ffffff;
+  --ms-testi-nav: var(--ms-color-ink);
+  --ms-testi-nav-hover-bg: var(--ms-color-ink);
+  --ms-testi-nav-hover-text: #ffffff;
+  --ms-testi-progress: var(--ms-color-accent);
+
+  /* Fixed by code, not editable in Elementor */
+  --ms-testi-gap: 24px;
+  --ms-testi-visible: 3;
+  --ms-testi-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  padding-block: var(--ms-space-xl);
+  background: var(--ms-testi-bg);
+  overflow: hidden;
+}
+
+/* ---------- Heading row ---------- */
+.ms-testi__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--ms-space-md);
+  margin-bottom: var(--ms-space-lg);
+}
+
+.ms-testi__eyebrow {
+  margin-bottom: var(--ms-space-xs);
+  font-family: var(--ms-font-body);
+  font-size: 0.8125rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ms-testi-eyebrow);
+}
+
+.ms-testi__heading {
+  margin: 0;
+  color: var(--ms-testi-heading);
+}
+
+/* ---------- Prev / next: small squares ---------- */
+.ms-testi__nav {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* button.* selectors beat Elementor's global button styles */
+.ms-testi button.ms-testi__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--ms-testi-nav);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--ms-testi-nav);
+  cursor: pointer;
+  transition:
+    background 0.35s ease,
+    color 0.35s ease,
+    opacity 0.35s ease,
+    transform 0.35s var(--ms-testi-ease);
+}
+
+.ms-testi button.ms-testi__btn:hover,
+.ms-testi button.ms-testi__btn:focus-visible {
+  border: 1px solid var(--ms-testi-nav-hover-bg);
+  background: var(--ms-testi-nav-hover-bg);
+  color: var(--ms-testi-nav-hover-text);
+}
+
+.ms-testi button.ms-testi__btn:active {
+  transform: scale(0.94);
+}
+
+.ms-testi button.ms-testi__btn:disabled {
+  opacity: 0.3;
+  background: transparent;
+  color: var(--ms-testi-nav);
+  cursor: default;
+  pointer-events: none;
+}
+
+.ms-testi__btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Track (native scroll-snap) ---------- */
+.ms-testi__track {
+  display: flex;
+  gap: var(--ms-testi-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ms-testi__track::-webkit-scrollbar {
+  display: none;
+}
+
+.ms-testi__track:focus-visible {
+  outline: 1px dashed var(--ms-testi-nav);
+  outline-offset: 6px;
+}
+
+.ms-testi__track.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+  user-select: none;
+}
+
+/* ---------- Card ---------- */
+.ms-testi__card {
+  position: relative;
+  display: flex;
+  flex: 0 0 calc((100% - (var(--ms-testi-visible) - 1) * var(--ms-testi-gap)) / var(--ms-testi-visible));
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  padding: 40px 36px 36px;
+  overflow: hidden;
+  background: var(--ms-testi-card-bg);
+  scroll-snap-align: start;
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s var(--ms-testi-ease);
+}
+
+/* Big decorative quote mark behind the text */
+.ms-testi__card::before {
+  content: "\201C";
+  position: absolute;
+  top: -8px;
+  right: 24px;
+  font-family: var(--ms-font-heading);
+  font-size: 9rem;
+  line-height: 1;
+  color: var(--ms-testi-mark);
+  opacity: 0.18;
+  transition: transform 0.8s var(--ms-testi-ease), opacity 0.5s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .ms-js .ms-testi__card.is-visible:hover {
+    transform: translate3d(0, -6px, 0);
+  }
+
+  .ms-testi__card:hover::before {
+    opacity: 0.3;
+    transform: translate3d(0, 6px, 0) scale(1.08);
+  }
+}
+
+/* ---------- Stars (drawn with clip-path, fill in one by one) ---------- */
+.ms-testi__stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: var(--ms-space-sm);
+}
+
+.ms-testi__star {
+  width: 16px;
+  height: 16px;
+  background: color-mix(in srgb, var(--ms-testi-star) 25%, transparent);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  transition: background 0.4s ease;
+}
+
+.ms-testi__star.is-on {
+  background: var(--ms-testi-star);
+}
+
+.ms-js .ms-testi__star.is-on {
+  background: color-mix(in srgb, var(--ms-testi-star) 25%, transparent);
+}
+
+.ms-js .ms-testi__card.is-visible .ms-testi__star.is-on {
+  background: var(--ms-testi-star);
+  transition-delay: calc(0.5s + var(--n, 0) * 90ms);
+}
+
+/* ---------- Quote ---------- */
+.ms-testi__quote {
+  position: relative;
+  flex: 1;
+  margin: 0 0 var(--ms-space-md);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--ms-testi-quote);
+}
+
+/* ---------- Author ---------- */
+.ms-testi__author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ms-testi__avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.ms-testi__avatar--initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ms-testi-initial-bg);
+  color: var(--ms-testi-initial-text);
+  font-family: var(--ms-font-heading);
+  font-size: 1.375rem;
+  line-height: 1;
+}
+
+.ms-testi__who {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ms-testi__name {
+  font-family: var(--ms-font-heading);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: var(--ms-testi-name);
+}
+
+.ms-testi__role {
+  font-family: var(--ms-font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ms-testi-role);
+}
+
+/* ---------- Progress line ---------- */
+.ms-testi__progress {
+  position: relative;
+  height: 1px;
+  margin-top: var(--ms-space-lg);
+  background: color-mix(in srgb, var(--ms-testi-progress) 25%, transparent);
+}
+
+.ms-testi__progress-bar {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--ms-testi-progress);
+  transform: scaleX(0.33);
+  transform-origin: left;
+  transition: transform 0.4s ease-out;
+}
+
+/* ---------- Tablet: 2 cards ---------- */
+@media (max-width: 1024px) {
+  .ms-testi {
+    --ms-testi-visible: 2;
+    --ms-testi-gap: 16px;
+    padding-block: var(--ms-space-lg);
+  }
+
+  .ms-testi__card {
+    padding: 32px 28px 28px;
+  }
+}
+
+/* ---------- Mobile: 1 card, next one peeks ---------- */
+@media (max-width: 767px) {
+  .ms-testi {
+    --ms-testi-visible: 1;
+  }
+
+  .ms-testi__head {
+    margin-bottom: var(--ms-space-md);
+  }
+
+  .ms-testi__card {
+    flex-basis: 86%;
+    padding: 28px 24px 24px;
+  }
+
+  .ms-testi__card::before {
+    font-size: 7rem;
+  }
+
+  /* Swipe is natural on touch, so the buttons step aside */
+  .ms-testi__nav {
+    display: none;
+  }
+
+  .ms-testi__progress {
+    margin-top: var(--ms-space-md);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-testi__track {
+    scroll-behavior: auto;
+  }
+
+  .ms-testi__card,
+  .ms-testi__card::before,
+  .ms-testi__star,
+  .ms-testi__progress-bar {
+    transition: none;
+  }
+}

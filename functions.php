@@ -115,6 +115,21 @@ function my_store_assets()
 		array('my-store-style'),
 		MY_STORE_VERSION
 	);
+
+	wp_enqueue_style(
+		'my-store-testimonials',
+		MY_STORE_URI . '/assets/css/testimonials.css',
+		array('my-store-style'),
+		MY_STORE_VERSION
+	);
+
+	wp_enqueue_script(
+		'my-store-testimonials',
+		MY_STORE_URI . '/assets/js/testimonials.js',
+		array(),
+		MY_STORE_VERSION,
+		true
+	);
 }
 add_action('wp_enqueue_scripts', 'my_store_assets');
 
