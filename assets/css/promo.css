@@ -335,3 +335,24 @@ html:not(.ms-js) .ms-promo__point::before {
     transition: none;
   }
 }
+
+/* Default state: ensure image is visible if JS or reveal logic fails */
+.ms-promo__frame[data-ms-reveal] {
+  opacity: 1;
+  transform: none;
+  clip-path: none;
+}
+
+/* Only apply clip-path wipe if JS explicitly takes over */
+.ms-js .ms-promo__frame[data-ms-reveal] {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 1.3s var(--ms-promo-ease);
+}
+
+.ms-js .ms-promo--image-right .ms-promo__frame[data-ms-reveal] {
+  clip-path: inset(0 0 0 100%);
+}
+
+.ms-js .ms-promo__frame[data-ms-reveal].is-visible {
+  clip-path: inset(0 0 0 0);
+}

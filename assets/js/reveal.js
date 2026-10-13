@@ -1,6 +1,9 @@
 (function () {
   'use strict';
 
+  // Automatically mark the document as JS-enabled
+  document.documentElement.classList.add('ms-js');
+
   var observer = null;
 
   function show(el) {
@@ -46,6 +49,6 @@
     });
   }
 
-  if (window.elementorFrontend && elementorFrontend.hooks) hookElementor();
+  if (window.elementorFrontend && window.elementorFrontend.hooks) hookElementor();
   else window.addEventListener('elementor/frontend/init', hookElementor);
 })();
