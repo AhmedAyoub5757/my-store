@@ -1,0 +1,463 @@
+/* ==========================================================================
+   Hero slider widget
+   ========================================================================== */
+.ms-hero {
+  /* Defaults. Elementor controls override these. */
+  --ms-hero-height: 90vh;
+  --ms-hero-img-width: 560px;
+  --ms-hero-word-opacity: 0.08;
+  --ms-hero-ui: var(--ms-color-ink); /* set by JS from the active slide */
+
+  /* Fixed by code, not editable in Elementor */
+  --ms-hero-thumb: 34px;
+  --ms-hero-time: 0.9s;
+  --ms-hero-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Set by JS */
+  --ms-hero-speed: 6000ms;
+  --ms-px: 0;
+  --ms-py: 0;
+
+  position: relative;
+  height: var(--ms-hero-height);
+  min-height: 580px;
+  overflow: hidden;
+  background: var(--ms-color-sand);
+}
+
+/* ---------- Slides (crossfade, outgoing slide stays underneath) ---------- */
+.ms-hero__slide {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--ms-hero-bg, var(--ms-color-sand));
+  color: var(--ms-hero-text, var(--ms-color-ink));
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--ms-hero-time) ease,
+    visibility 0s linear var(--ms-hero-time);
+}
+
+.ms-hero__slide.is-leaving {
+  z-index: 1;
+  opacity: 1;
+  visibility: visible;
+}
+
+.ms-hero__slide.is-active {
+  z-index: 2;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* Used by JS to place the incoming slide without animating */
+.ms-hero__slide.no-anim,
+.ms-hero__slide.no-anim * {
+  transition: none !important;
+}
+
+/* ---------- Giant background word ---------- */
+.ms-hero__word {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  z-index: 0;
+  font-family: var(--ms-font-heading);
+  font-size: clamp(6rem, 22vw, 22rem);
+  font-weight: 600;
+  line-height: 0.8;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: currentColor;
+  opacity: 0;
+  transform: translate3d(-50%, 0, 0);
+  /* parallax uses the separate "translate" property so it never fights the slide transform */
+  translate: calc(var(--ms-px) * 22px) calc(var(--ms-py) * 10px);
+  transition:
+    transform calc(var(--ms-hero-time) * 1.2) var(--ms-hero-ease),
+    opacity var(--ms-hero-time) ease,
+    translate 0.8s ease-out;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ms-hero__slide.is-active .ms-hero__word {
+  opacity: var(--ms-hero-word-opacity);
+}
+
+.ms-hero__slide.is-before .ms-hero__word {
+  transform: translate3d(calc(-50% - 12vw), 0, 0);
+}
+
+.ms-hero__slide.is-after .ms-hero__word {
+  transform: translate3d(calc(-50% + 12vw), 0, 0);
+}
+
+/* ---------- Product image ---------- */
+.ms-hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 0;
+  translate: calc(var(--ms-px) * -14px) calc(var(--ms-py) * -8px);
+  transition: translate 0.8s ease-out;
+  pointer-events: none;
+}
+
+.ms-hero__image {
+  width: 100%;
+  height: 100%;
+  max-height: calc(var(--ms-hero-height) - 120px);
+  max-width: min(var(--ms-hero-img-width), 65%);
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 30px 30px rgba(0, 0, 0, 0.18));
+  opacity: 0;
+  transition:
+    transform calc(var(--ms-hero-time) * 1.15) var(--ms-hero-ease),
+    opacity var(--ms-hero-time) ease;
+}
+
+.ms-hero__slide.is-active .ms-hero__image {
+  opacity: 1;
+  transform: none;
+  animation: ms-hero-float 7s ease-in-out 1.2s infinite;
+}
+
+/* Previous slides sit to the left, next slides wait at the bottom right (tilted) */
+.ms-hero__slide.is-before .ms-hero__image {
+  transform: translate3d(-40%, 0, 0) scale(0.8) rotate(-8deg);
+}
+
+.ms-hero__slide.is-after .ms-hero__image {
+  transform: translate3d(45%, 22%, 0) scale(0.5) rotate(10deg);
+}
+
+@keyframes ms-hero-float {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -10px; }
+}
+
+/* ---------- Text ---------- */
+.ms-hero__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.ms-hero__text {
+  max-width: 340px;
+}
+
+.ms-hero__text > * {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.ms-hero__slide.is-active .ms-hero__text > * {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s var(--ms-hero-ease);
+}
+
+.ms-hero__slide.is-active .ms-hero__text > :nth-child(1) { transition-delay: 0.35s; }
+.ms-hero__slide.is-active .ms-hero__text > :nth-child(2) { transition-delay: 0.45s; }
+.ms-hero__slide.is-active .ms-hero__text > :nth-child(3) { transition-delay: 0.55s; }
+.ms-hero__slide.is-active .ms-hero__text > :nth-child(4) { transition-delay: 0.65s; }
+
+.ms-hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: var(--ms-space-sm);
+  font-family: var(--ms-font-body);
+  font-size: 0.8125rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Line that draws in */
+.ms-hero__eyebrow::before {
+  content: "";
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.5s ease;
+}
+
+.ms-hero__slide.is-active .ms-hero__eyebrow::before {
+  width: 36px;
+  transition: width 0.9s var(--ms-hero-ease) 0.6s;
+}
+
+.ms-hero__title {
+  margin-bottom: var(--ms-space-sm);
+  font-size: clamp(2.25rem, 4vw, 3.75rem);
+  color: inherit;
+}
+
+.ms-hero__desc {
+  max-width: 30ch;
+  margin-bottom: var(--ms-space-md);
+  color: inherit;
+}
+
+/* Button with a sliding fill on hover */
+.ms-hero__button {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 14px 32px;
+  background: var(--ms-hero-btn-bg, var(--ms-hero-text, var(--ms-color-ink)));
+  color: var(--ms-hero-btn-text, var(--ms-hero-bg, var(--ms-color-bg)));
+  font-family: var(--ms-font-body);
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  pointer-events: auto;
+  transition: color 0.35s ease, letter-spacing 0.35s ease;
+}
+
+.ms-hero__button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ms-hero-btn-hover-bg, var(--ms-color-accent));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ms-hero-ease);
+}
+
+.ms-hero__button:hover {
+  color: var(--ms-hero-btn-hover-text, var(--ms-color-white));
+  letter-spacing: 0.18em;
+}
+
+.ms-hero__button:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ---------- Counter ---------- */
+.ms-hero__counter {
+  position: absolute;
+  left: 32px;
+  bottom: 32px;
+  z-index: 5;
+  display: flex;
+  gap: 8px;
+  font-family: var(--ms-font-heading);
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+  color: var(--ms-hero-ui-override, var(--ms-hero-ui));
+  transition: color var(--ms-hero-time) ease;
+}
+
+.ms-hero__counter-sep {
+  opacity: 0.5;
+}
+
+/* ---------- Thumbnails: compact, clean floating pill on extreme right ---------- */
+.ms-hero__controls {
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  z-index: 5;
+  transform: translateY(-50%);
+  color: var(--ms-hero-ui-override, var(--ms-hero-ui));
+  transition: color var(--ms-hero-time) ease;
+}
+
+.ms-hero__thumbs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  background: color-mix(in srgb, var(--ms-hero-ui, #000) 4%, transparent);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+}
+
+/* button.* selectors beat Elementor's global button styles */
+.ms-hero button.ms-hero__thumb {
+  position: relative;
+  width: var(--ms-hero-thumb);
+  height: var(--ms-hero-thumb);
+  padding: 3px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.45;
+  transition:
+    transform 0.3s var(--ms-hero-ease),
+    opacity 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+  animation: ms-hero-thumb-in 0.7s var(--ms-hero-ease) backwards;
+  animation-delay: calc(0.5s + var(--i, 0) * 90ms);
+}
+
+.ms-hero button.ms-hero__thumb:hover,
+.ms-hero button.ms-hero__thumb:focus-visible {
+  border-color: color-mix(in srgb, currentColor 40%, transparent);
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  color: inherit;
+  opacity: 0.85;
+  transform: scale(1.08);
+}
+
+.ms-hero button.ms-hero__thumb.is-active {
+  border-color: var(--ms-hero-ring, currentColor);
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  opacity: 1;
+  transform: scale(1.12);
+}
+
+.ms-hero__thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  filter: grayscale(0.5);
+  transition: filter 0.4s ease, transform 0.4s var(--ms-hero-ease);
+}
+
+.ms-hero__thumb:hover .ms-hero__thumb-img,
+.ms-hero__thumb.is-active .ms-hero__thumb-img {
+  filter: none;
+}
+
+.ms-hero__thumb:hover .ms-hero__thumb-img {
+  transform: scale(1.05);
+}
+
+/* Autoplay progress bar wrapped around or subtly under active thumbnail */
+.ms-hero__bar {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--ms-hero-ring, currentColor);
+  clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+  opacity: 0;
+}
+
+.ms-hero.is-autoplay:not(.is-paused) .ms-hero__thumb.is-active .ms-hero__bar {
+  opacity: 1;
+  animation: ms-hero-progress var(--ms-hero-speed) linear forwards;
+}
+
+@keyframes ms-hero-progress {
+  0%   { clip-path: polygon(50% 50%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%); }
+  25%  { clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%, 100% 0%, 50% 50%); }
+  50%  { clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 50% 50%); }
+  75%  { clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 100%, 0% 100%, 0% 100%, 50% 50%); }
+  100% { clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%, 50% 50%, 50% 50%); }
+}
+
+@keyframes ms-hero-thumb-in {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}
+
+/* ---------- Tablet: text moves to the top, product below ---------- */
+@media (max-width: 1024px) {
+  .ms-hero__content {
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .ms-hero__text {
+    max-width: 520px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .ms-hero__eyebrow {
+    justify-content: center;
+  }
+
+  .ms-hero__desc {
+    margin-inline: auto;
+  }
+
+  .ms-hero__media {
+    padding: 220px 0 40px;
+  }
+
+  .ms-hero__image {
+    max-height: calc(var(--ms-hero-height) - 260px);
+  }
+
+  .ms-hero__word {
+    bottom: 8%;
+  }
+
+  .ms-hero__counter {
+    display: none;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 767px) {
+  .ms-hero {
+    --ms-hero-thumb: 30px;
+  }
+
+  .ms-hero__controls {
+    right: 12px;
+  }
+
+  .ms-hero__desc {
+    display: none;
+  }
+
+  .ms-hero__media {
+    padding: 190px 0 30px;
+  }
+
+  .ms-hero__image {
+    max-height: calc(var(--ms-hero-height) - 220px);
+    max-width: calc(100% - 100px);
+  }
+
+  .ms-hero__thumbs {
+    gap: 6px;
+    padding: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-hero {
+    --ms-hero-time: 0.01s;
+  }
+
+  .ms-hero *,
+  .ms-hero *::before,
+  .ms-hero *::after {
+    animation: none !important;
+  }
+}

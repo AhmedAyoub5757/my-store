@@ -1,0 +1,294 @@
+/* ==========================================================================
+   Navbar widget
+   ========================================================================== */
+.ms-navbar {
+  /* Defaults. Elementor controls override these. */
+  --ms-nav-bg: var(--ms-color-bg);
+  --ms-nav-border: var(--ms-color-sand);
+  --ms-nav-height: 80px;
+  --ms-nav-logo-width: 120px;
+  --ms-nav-link: var(--ms-color-ink);
+  --ms-nav-link-hover: var(--ms-color-accent);
+  --ms-nav-gap: 40px;
+  --ms-nav-icon: var(--ms-color-ink);
+  --ms-nav-icon-hover: var(--ms-color-accent);
+  --ms-nav-icon-size: 20px;
+  --ms-nav-icon-gap: 22px;
+  --ms-nav-badge-bg: var(--ms-color-accent);
+  --ms-nav-badge-text: var(--ms-color-white);
+  --ms-nav-toggle: var(--ms-color-ink);
+  --ms-nav-panel-bg: var(--ms-nav-bg);
+
+  position: relative;
+  background: var(--ms-nav-bg);
+  border-bottom: 1px solid var(--ms-nav-border);
+}
+
+/* Three columns so the menu is truly centered */
+.ms-navbar__inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: var(--ms-nav-height);
+}
+
+/* ---------- Logo ---------- */
+.ms-navbar__logo {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+}
+
+.ms-navbar__logo-img {
+  width: var(--ms-nav-logo-width);
+  height: auto;
+}
+
+.ms-navbar__logo-text {
+  font-family: var(--ms-font-heading);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--ms-color-ink);
+}
+
+/* ---------- Menu ---------- */
+.ms-navbar__menu {
+  display: flex;
+  align-items: center;
+  gap: var(--ms-nav-gap);
+}
+
+.ms-navbar__link {
+  position: relative;
+  display: inline-block;
+  padding: 6px 0;
+  font-family: var(--ms-font-body);
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ms-nav-link);
+  transition: color var(--ms-transition), opacity var(--ms-transition);
+}
+
+/* Beat the global a:hover so "none" and "fade" really keep the color */
+.ms-navbar__link:hover {
+  color: var(--ms-nav-link);
+}
+
+/* Hover effect: color / underline */
+.ms-navbar--hover-color .ms-navbar__link:hover,
+.ms-navbar--hover-color .ms-navbar__link.is-active,
+.ms-navbar--hover-underline .ms-navbar__link:hover,
+.ms-navbar--hover-underline .ms-navbar__link.is-active {
+  color: var(--ms-nav-link-hover);
+}
+
+.ms-navbar--hover-underline .ms-navbar__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--ms-transition);
+}
+
+.ms-navbar--hover-underline .ms-navbar__link:hover::after,
+.ms-navbar--hover-underline .ms-navbar__link.is-active::after {
+  transform: scaleX(1);
+}
+
+/* Hover effect: fade the others */
+.ms-navbar--hover-fade .ms-navbar__menu:hover .ms-navbar__link:not(:hover) {
+  opacity: 0.45;
+}
+
+/* ---------- Icons ---------- */
+.ms-navbar__actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: var(--ms-nav-icon-gap);
+}
+
+/* button.* selectors beat Elementor's global button styles */
+.ms-navbar button.ms-navbar__icon,
+.ms-navbar button.ms-navbar__toggle,
+.ms-navbar button.ms-navbar__icon:hover,
+.ms-navbar button.ms-navbar__toggle:hover,
+.ms-navbar button.ms-navbar__icon:focus,
+.ms-navbar button.ms-navbar__toggle:focus {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.ms-navbar__icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ms-nav-icon-size);
+  line-height: 1;
+  color: var(--ms-nav-icon);
+  cursor: pointer;
+  transition: color var(--ms-transition);
+}
+
+.ms-navbar__icon:hover,
+.ms-navbar button.ms-navbar__icon:hover {
+  color: var(--ms-nav-icon-hover);
+}
+
+.ms-navbar__icon svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+
+.ms-navbar__cart-count {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--ms-nav-badge-bg);
+  color: var(--ms-nav-badge-text);
+  font-family: var(--ms-font-body);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 16px;
+  text-align: center;
+}
+
+.ms-navbar__cart-count.is-empty {
+  display: none;
+}
+
+/* ---------- Search panel ---------- */
+.ms-navbar__search {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding: var(--ms-space-md) 0;
+  background: var(--ms-nav-panel-bg);
+  border-bottom: 1px solid var(--ms-nav-border);
+}
+
+.ms-navbar__search[hidden] {
+  display: none;
+}
+
+.ms-navbar__search-form {
+  display: flex;
+  gap: var(--ms-space-xs);
+}
+
+.ms-navbar__search-form input[type="search"] {
+  flex: 1;
+  padding: 14px 16px;
+  border: 1px solid var(--ms-color-sand);
+  background: var(--ms-color-white);
+  border-radius: var(--ms-radius);
+}
+
+/* ---------- Mobile toggle (hidden on desktop) ---------- */
+.ms-navbar__toggle {
+  display: none;
+  cursor: pointer;
+}
+
+.ms-navbar__burger,
+.ms-navbar__burger::before,
+.ms-navbar__burger::after {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--ms-nav-toggle);
+  transition: transform var(--ms-transition), background var(--ms-transition);
+}
+
+.ms-navbar__burger {
+  position: relative;
+}
+
+.ms-navbar__burger::before,
+.ms-navbar__burger::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.ms-navbar__burger::before { top: -7px; }
+.ms-navbar__burger::after  { top: 7px; }
+
+.ms-navbar.is-nav-open .ms-navbar__burger {
+  background: transparent;
+}
+
+.ms-navbar.is-nav-open .ms-navbar__burger::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.ms-navbar.is-nav-open .ms-navbar__burger::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* ---------- Tablet & mobile ---------- */
+@media (max-width: 1024px) {
+  .ms-navbar__inner {
+    grid-template-columns: 1fr auto;
+  }
+
+  .ms-navbar__actions {
+    gap: min(var(--ms-nav-icon-gap), 16px);
+  }
+
+  .ms-navbar__toggle {
+    display: inline-flex;
+  }
+
+  .ms-navbar__nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    padding: var(--ms-space-xs) var(--ms-gutter) var(--ms-space-md);
+    background: var(--ms-nav-panel-bg);
+    border-bottom: 1px solid var(--ms-nav-border);
+  }
+
+  .ms-navbar.is-nav-open .ms-navbar__nav {
+    display: block;
+  }
+
+  .ms-navbar__menu {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .ms-navbar__link {
+    display: block;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--ms-nav-border);
+  }
+
+  .ms-navbar--hover-underline .ms-navbar__link::after {
+    display: none;
+  }
+}
