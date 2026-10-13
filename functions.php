@@ -76,5 +76,12 @@ function my_store_assets() {
 		MY_STORE_VERSION,
 		true
 	);
+
+		wp_enqueue_style(
+		'my-store-categories',
+		MY_STORE_URI . '/assets/css/categories.css',
+		array( 'my-store-style' ),
+		MY_STORE_VERSION
+	);
 }
 add_action( 'wp_enqueue_scripts', 'my_store_assets' );
