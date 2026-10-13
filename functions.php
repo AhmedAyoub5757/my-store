@@ -16,6 +16,7 @@ require_once MY_STORE_DIR . '/inc/site-parts.php';
 require_once MY_STORE_DIR . '/inc/woocommerce.php';
 require_once MY_STORE_DIR . '/inc/elementor/init.php';
 require_once MY_STORE_DIR . '/inc/newsletter.php';
+require_once MY_STORE_DIR . '/inc/shop.php';
 
 /**
  * Theme setup.
@@ -154,6 +155,21 @@ function my_store_assets()
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 'ms_subscribe' ),
 		)
+	);
+
+		wp_enqueue_style(
+		'my-store-shop',
+		MY_STORE_URI . '/assets/css/shop.css',
+		array( 'my-store-product-card' ),
+		MY_STORE_VERSION
+	);
+
+	wp_enqueue_script(
+		'my-store-shop',
+		MY_STORE_URI . '/assets/js/shop.js',
+		array(),
+		MY_STORE_VERSION,
+		true
 	);
 }
 add_action('wp_enqueue_scripts', 'my_store_assets');

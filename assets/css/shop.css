@@ -1,0 +1,505 @@
+/* ==========================================================================
+   Shop archive
+   ========================================================================== */
+.ms-shop {
+  /* Defaults. Elementor controls override these. */
+  --ms-shop-bg: transparent;
+  --ms-shop-head-bg: var(--ms-color-sand);
+  --ms-shop-eyebrow: var(--ms-color-accent);
+  --ms-shop-title: var(--ms-color-ink);
+  --ms-shop-text: var(--ms-color-text);
+  --ms-shop-group: var(--ms-color-ink);
+  --ms-shop-link: var(--ms-color-text);
+  --ms-shop-link-active: var(--ms-color-accent);
+  --ms-shop-chip-bg: var(--ms-color-ink);
+  --ms-shop-chip-text: #ffffff;
+  --ms-shop-line: var(--ms-color-sand);
+
+  /* Fixed by code, not editable in Elementor */
+  --ms-shop-sidebar: 260px;
+  --ms-shop-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  background: var(--ms-shop-bg);
+}
+
+html.ms-lock {
+  overflow: hidden;
+}
+
+/* ---------- Header band ---------- */
+.ms-shop__head {
+  padding-block: var(--ms-space-lg);
+  background: var(--ms-shop-head-bg);
+}
+
+.ms-shop__crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: var(--ms-space-md);
+  font-family: var(--ms-font-body);
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  color: var(--ms-shop-text);
+}
+
+.ms-shop__crumbs a:hover {
+  color: var(--ms-shop-link-active);
+}
+
+.ms-shop__crumbs span:last-child {
+  opacity: 0.65;
+}
+
+.ms-shop__eyebrow {
+  margin-bottom: var(--ms-space-xs);
+  font-family: var(--ms-font-body);
+  font-size: 0.8125rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ms-shop-eyebrow);
+}
+
+.ms-shop__title {
+  margin: 0;
+  color: var(--ms-shop-title);
+}
+
+.ms-shop__desc {
+  max-width: 56ch;
+  margin-top: var(--ms-space-sm);
+  color: var(--ms-shop-text);
+}
+
+.ms-shop__desc > :last-child {
+  margin-bottom: 0;
+}
+
+.ms-js .ms-shop__head .ms-container > * {
+  animation: ms-shop-in 0.9s var(--ms-shop-ease) backwards;
+}
+
+.ms-js .ms-shop__head .ms-container > :nth-child(2) { animation-delay: 0.08s; }
+.ms-js .ms-shop__head .ms-container > :nth-child(3) { animation-delay: 0.16s; }
+.ms-js .ms-shop__head .ms-container > :nth-child(4) { animation-delay: 0.24s; }
+
+@keyframes ms-shop-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* ---------- Layout ---------- */
+.ms-shop__layout {
+  display: grid;
+  grid-template-columns: var(--ms-shop-sidebar) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--ms-space-lg);
+  padding-block: var(--ms-space-lg) var(--ms-space-xl);
+}
+
+/* ---------- Sidebar ---------- */
+.ms-shop__filters {
+  position: sticky;
+  top: 112px;
+}
+
+.ms-shop__filters-top,
+.ms-shop__overlay,
+.ms-shop__filter-btn {
+  display: none;
+}
+
+.ms-shop__clear {
+  display: inline-block;
+  margin-bottom: var(--ms-space-md);
+  padding-bottom: 2px;
+  border-bottom: 1px solid currentColor;
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  color: var(--ms-shop-link-active);
+}
+
+.ms-shop__group {
+  padding-bottom: var(--ms-space-md);
+  margin-bottom: var(--ms-space-md);
+  border-bottom: 1px solid var(--ms-shop-line);
+}
+
+.ms-shop__group:last-child {
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
+.ms-shop__group-title,
+.ms-shop__filters-title {
+  margin: 0 0 var(--ms-space-sm);
+  font-family: var(--ms-font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--ms-shop-group);
+}
+
+/* Categories */
+.ms-shop__cats {
+  display: grid;
+  gap: 4px;
+}
+
+.ms-shop__cats a {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  color: var(--ms-shop-link);
+  transition: color 0.3s ease, padding-left 0.45s var(--ms-shop-ease);
+}
+
+.ms-shop__cats a:hover,
+.ms-shop__cats a.is-active {
+  padding-left: 10px;
+  color: var(--ms-shop-link-active);
+}
+
+.ms-shop__cats a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.45s var(--ms-shop-ease);
+}
+
+.ms-shop__cats a:hover::before,
+.ms-shop__cats a.is-active::before {
+  width: 6px;
+}
+
+.ms-shop__count {
+  font-size: 0.8125rem;
+  opacity: 0.55;
+}
+
+/* Price */
+.ms-shop__price {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ms-shop .ms-shop__price input[type="number"] {
+  width: calc(50% - 14px);
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--ms-shop-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 0.9375rem;
+  -moz-appearance: textfield;
+}
+
+.ms-shop .ms-shop__price input[type="number"]::-webkit-outer-spin-button,
+.ms-shop .ms-shop__price input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.ms-shop .ms-shop__price input[type="number"]:focus {
+  border-color: var(--ms-shop-link-active);
+  outline: 0;
+}
+
+.ms-shop .ms-shop__price button {
+  width: 100%;
+  margin-top: 4px;
+  padding: 11px 16px;
+  border: 1px solid var(--ms-shop-group);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--ms-shop-group);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+.ms-shop .ms-shop__price button:hover {
+  border-color: var(--ms-shop-chip-bg);
+  background: var(--ms-shop-chip-bg);
+  color: var(--ms-shop-chip-text);
+}
+
+/* Attribute chips */
+.ms-shop__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ms-shop__chip {
+  display: inline-block;
+  min-width: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--ms-shop-line);
+  font-size: 0.875rem;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--ms-shop-link);
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease,
+    transform 0.45s var(--ms-shop-ease);
+}
+
+.ms-shop__chip:hover {
+  border-color: var(--ms-shop-group);
+  color: var(--ms-shop-link);
+  transform: translateY(-2px);
+}
+
+.ms-shop__chip.is-active,
+.ms-shop__chip.is-active:hover {
+  border-color: var(--ms-shop-chip-bg);
+  background: var(--ms-shop-chip-bg);
+  color: var(--ms-shop-chip-text);
+}
+
+/* ---------- Toolbar ---------- */
+.ms-shop__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ms-space-sm);
+  margin-bottom: var(--ms-space-md);
+  padding-bottom: var(--ms-space-sm);
+  border-bottom: 1px solid var(--ms-shop-line);
+}
+
+.ms-shop__result-count {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: var(--ms-shop-link);
+}
+
+.ms-shop__sort {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  font-size: 0.9375rem;
+  color: var(--ms-shop-link);
+}
+
+.ms-shop .ms-shop__sort select {
+  padding: 8px 32px 8px 12px;
+  border: 1px solid var(--ms-shop-line);
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.ms-shop .ms-shop__sort select:focus {
+  border-color: var(--ms-shop-link-active);
+  outline: 0;
+}
+
+/* ---------- Grid ---------- */
+.ms-shop__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 56px 24px;
+}
+
+.ms-shop__empty {
+  padding: var(--ms-space-xl) var(--ms-space-md);
+  border: 1px dashed var(--ms-shop-line);
+  text-align: center;
+  color: var(--ms-shop-link);
+}
+
+/* ---------- Pagination ---------- */
+.ms-shop__pagination {
+  margin-top: var(--ms-space-lg);
+}
+
+.ms-shop__pagination ul.page-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ms-shop__pagination a.page-numbers,
+.ms-shop__pagination span.page-numbers {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--ms-shop-line);
+  font-size: 0.9375rem;
+  color: var(--ms-shop-link);
+  transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+}
+
+.ms-shop__pagination a.page-numbers:hover {
+  border-color: var(--ms-shop-group);
+  color: var(--ms-shop-link);
+}
+
+.ms-shop__pagination span.page-numbers.current {
+  border-color: var(--ms-shop-chip-bg);
+  background: var(--ms-shop-chip-bg);
+  color: var(--ms-shop-chip-text);
+}
+
+.ms-shop__pagination span.page-numbers.dots {
+  border-color: transparent;
+}
+
+/* ---------- Tablet & mobile: filters become a drawer ---------- */
+@media (max-width: 1024px) {
+  .ms-shop__head {
+    padding-block: var(--ms-space-md) var(--ms-space-lg);
+  }
+
+  .ms-shop__layout {
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: var(--ms-space-md) var(--ms-space-lg);
+  }
+
+  .ms-shop__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 16px;
+  }
+
+  .ms-shop__filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ms-shop .ms-shop__filter-btn {
+    padding: 10px 16px;
+    border: 1px solid var(--ms-shop-group);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--ms-shop-group);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .ms-shop__filter-btn svg,
+  .ms-shop__close svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .ms-shop__result-count {
+    display: none;
+  }
+
+  .ms-shop__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: block;
+    background: rgba(26, 26, 26, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+  }
+
+  .ms-shop.is-filters-open .ms-shop__overlay {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .ms-shop__filters {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 301;
+    width: min(380px, 88vw);
+    padding: 0 var(--ms-space-md) var(--ms-space-md);
+    overflow-y: auto;
+    background: var(--ms-color-bg);
+    transform: translateX(-100%);
+    transition: transform 0.5s var(--ms-shop-ease);
+  }
+
+  .ms-shop.is-filters-open .ms-shop__filters {
+    transform: none;
+  }
+
+  .ms-shop__filters-top {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 calc(var(--ms-space-md) * -1) var(--ms-space-md);
+    padding: 20px var(--ms-space-md);
+    border-bottom: 1px solid var(--ms-shop-line);
+    background: var(--ms-color-bg);
+  }
+
+  .ms-shop__filters-title {
+    margin: 0;
+  }
+
+  .ms-shop .ms-shop__close {
+    display: inline-flex;
+    padding: 4px;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--ms-shop-group);
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 767px) {
+  .ms-shop__grid {
+    gap: 32px 12px;
+  }
+
+  .ms-shop__sort label {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-shop *,
+  .ms-shop *::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}

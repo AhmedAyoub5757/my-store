@@ -30,6 +30,7 @@ function my_store_register_widgets($widgets_manager)
 	require_once MY_STORE_DIR . '/inc/elementor/widgets/class-promo-widget.php';
 	require_once MY_STORE_DIR . '/inc/elementor/widgets/class-testimonials-widget.php';
 	require_once MY_STORE_DIR . '/inc/elementor/widgets/class-footer-widget.php';
+	require_once MY_STORE_DIR . '/inc/elementor/widgets/class-shop-widget.php';
 
 	$widgets_manager->register(new My_Store_Navbar_Widget());
 	$widgets_manager->register(new My_Store_Hero_Widget());
@@ -38,5 +39,6 @@ function my_store_register_widgets($widgets_manager)
 	$widgets_manager->register(new My_Store_Promo_Widget());
 	$widgets_manager->register( new My_Store_Testimonials_Widget() );
 	$widgets_manager->register( new My_Store_Footer_Widget() );
+	$widgets_manager->register( new My_Store_Shop_Widget() );
 }
 add_action('elementor/widgets/register', 'my_store_register_widgets');

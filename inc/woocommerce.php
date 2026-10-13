@@ -139,3 +139,11 @@ function my_store_product_card( $product, $args = array() ) {
 	</article>
 	<?php
 }
+
+/**
+ * Products per page on the shop and category pages.
+ */
+function my_store_products_per_page() {
+	return 12;
+}
+add_filter( 'loop_shop_per_page', 'my_store_products_per_page', 20 );
