@@ -1,0 +1,106 @@
+/* ==========================================================================
+   Product grid widget
+   ========================================================================== */
+.ms-products {
+  /* Defaults. Elementor controls override these. */
+  --ms-products-bg: transparent;
+  --ms-products-eyebrow: var(--ms-color-accent);
+  --ms-products-heading: var(--ms-color-ink);
+  --ms-products-link: var(--ms-color-ink);
+  --ms-products-link-hover: var(--ms-color-accent);
+
+  padding-block: var(--ms-space-xl);
+  background: var(--ms-products-bg);
+}
+
+/* ---------- Heading row ---------- */
+.ms-products__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--ms-space-md);
+  margin-bottom: var(--ms-space-lg);
+}
+
+.ms-products__eyebrow {
+  margin-bottom: var(--ms-space-xs);
+  font-family: var(--ms-font-body);
+  font-size: 0.8125rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ms-products-eyebrow);
+}
+
+.ms-products__heading {
+  margin: 0;
+  color: var(--ms-products-heading);
+}
+
+.ms-products__more {
+  position: relative;
+  flex-shrink: 0;
+  padding-bottom: 4px;
+  font-family: var(--ms-font-body);
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ms-products-link);
+}
+
+.ms-products__more::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform-origin: right;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ms-products__more:hover {
+  color: var(--ms-products-link-hover);
+}
+
+.ms-products__more:hover::after {
+  transform: scaleX(0.35);
+}
+
+/* ---------- Grid: fixed by code ---------- */
+.ms-products__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 56px 24px;
+}
+
+.ms-products__notice {
+  padding: var(--ms-space-md);
+  border: 1px dashed var(--ms-color-sand);
+  color: var(--ms-color-muted);
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .ms-products {
+    padding-block: var(--ms-space-lg);
+  }
+
+  .ms-products__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 16px;
+  }
+}
+
+@media (max-width: 767px) {
+  .ms-products__head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ms-space-sm);
+    margin-bottom: var(--ms-space-md);
+  }
+
+  .ms-products__grid {
+    gap: 32px 12px;
+  }
+}

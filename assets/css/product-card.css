@@ -1,0 +1,219 @@
+/* ==========================================================================
+   Product card (shared)
+   ========================================================================== */
+.ms-card {
+  --ms-card-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+
+/* ---------- Image ---------- */
+.ms-card__media {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--ms-color-sand);
+}
+
+.ms-card__link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+}
+
+.ms-card__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.6s ease, transform 1.2s var(--ms-card-ease);
+}
+
+.ms-card__img--hover {
+  opacity: 0;
+}
+
+/* ---------- Badge ---------- */
+.ms-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  padding: 5px 10px;
+  background: var(--ms-card-badge-bg, var(--ms-color-accent));
+  color: var(--ms-card-badge-text, #fff);
+  font-family: var(--ms-font-body);
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.ms-card__badge--out {
+  background: var(--ms-color-ink);
+  color: var(--ms-color-bg);
+}
+
+/* ---------- Quick add button (slides up on hover) ---------- */
+.ms-card__add {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 13px 16px;
+  background: var(--ms-card-btn-bg, var(--ms-color-ink));
+  color: var(--ms-card-btn-text, #fff);
+  font-family: var(--ms-font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translate3d(0, calc(100% + 16px), 0);
+  transition:
+    transform 0.55s var(--ms-card-ease),
+    opacity 0.35s ease,
+    color 0.35s ease;
+}
+
+/* Sliding fill on hover */
+.ms-card__add::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ms-card-btn-hover-bg, var(--ms-color-accent));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ms-card-ease);
+}
+
+.ms-card__add:hover {
+  color: var(--ms-card-btn-hover-text, #fff);
+}
+
+.ms-card__add:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* AJAX states added by WooCommerce */
+.ms-card__add.loading {
+  pointer-events: none;
+  animation: ms-card-pulse 0.9s ease-in-out infinite;
+}
+
+.ms-card__add.added::before {
+  transform: scaleX(1);
+}
+
+.ms-card .added_to_cart {
+  display: none; /* WooCommerce's "View cart" link: the navbar badge already shows it */
+}
+
+@keyframes ms-card-pulse {
+  50% { opacity: 0.55; }
+}
+
+/* ---------- Hover (mouse devices) ---------- */
+@media (hover: hover) {
+  .ms-card:hover .ms-card__img--main,
+  .ms-card:focus-within .ms-card__img--main {
+    transform: scale(1.04);
+  }
+
+  .ms-card--swap:hover .ms-card__img--hover,
+  .ms-card--swap:focus-within .ms-card__img--hover {
+    opacity: 1;
+  }
+
+  .ms-card:hover .ms-card__add,
+  .ms-card:focus-within .ms-card__add,
+  .ms-card__add.loading,
+  .ms-card__add.added {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Touch devices: button is always visible, slimmer */
+@media (hover: none) {
+  .ms-card__add {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    padding: 10px 8px;
+    font-size: 0.6875rem;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Info ---------- */
+.ms-card__info {
+  padding-top: var(--ms-space-sm);
+}
+
+.ms-card__cat {
+  margin: 0 0 6px;
+  font-family: var(--ms-font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ms-card-muted, var(--ms-color-muted));
+}
+
+.ms-card__title {
+  margin: 0 0 6px;
+  font-size: 1.375rem;
+  line-height: 1.2;
+}
+
+.ms-card__title a {
+  color: var(--ms-card-title, var(--ms-color-ink));
+}
+
+.ms-card__title a:hover {
+  color: var(--ms-card-title-hover, var(--ms-color-accent));
+}
+
+.ms-card__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  font-family: var(--ms-font-body);
+  font-size: 0.9375rem;
+  color: var(--ms-card-price, var(--ms-color-ink));
+}
+
+.ms-card__price del {
+  color: var(--ms-card-muted, var(--ms-color-muted));
+  opacity: 0.8;
+}
+
+.ms-card__price ins {
+  text-decoration: none;
+}
+
+@media (max-width: 767px) {
+  .ms-card__title {
+    font-size: 1.125rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-card__img,
+  .ms-card__add {
+    transition: none;
+  }
+}

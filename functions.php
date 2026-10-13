@@ -83,5 +83,35 @@ function my_store_assets() {
 		array( 'my-store-style' ),
 		MY_STORE_VERSION
 	);
+
+		wp_enqueue_style(
+		'my-store-product-card',
+		MY_STORE_URI . '/assets/css/product-card.css',
+		array( 'my-store-style' ),
+		MY_STORE_VERSION
+	);
+
+	wp_enqueue_style(
+		'my-store-products',
+		MY_STORE_URI . '/assets/css/products.css',
+		array( 'my-store-product-card' ),
+		MY_STORE_VERSION
+	);
+
+	wp_enqueue_script(
+		'my-store-reveal',
+		MY_STORE_URI . '/assets/js/reveal.js',
+		array(),
+		MY_STORE_VERSION,
+		true
+	);
 }
 add_action( 'wp_enqueue_scripts', 'my_store_assets' );
+
+/**
+ * Flag JS-enabled browsers (used by the scroll reveal animation).
+ */
+function my_store_js_flag() {
+	echo "<script>document.documentElement.classList.add('ms-js');</script>\n";
+}
+add_action( 'wp_head', 'my_store_js_flag', 1 );

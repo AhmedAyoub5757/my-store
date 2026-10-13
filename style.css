@@ -157,3 +157,28 @@ p {
 @media (max-width: 600px) {
   .admin-bar .ms-site-header { top: 0; }
 }
+
+/* ==========================================================================
+   6. Scroll reveal
+   ========================================================================== */
+.ms-js [data-ms-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 32px, 0);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+.ms-js [data-ms-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-js [data-ms-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
