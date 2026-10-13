@@ -15,6 +15,7 @@ define('MY_STORE_URI', get_template_directory_uri());
 require_once MY_STORE_DIR . '/inc/site-parts.php';
 require_once MY_STORE_DIR . '/inc/woocommerce.php';
 require_once MY_STORE_DIR . '/inc/elementor/init.php';
+require_once MY_STORE_DIR . '/inc/newsletter.php';
 
 /**
  * Theme setup.
@@ -129,6 +130,30 @@ function my_store_assets()
 		array(),
 		MY_STORE_VERSION,
 		true
+	);
+
+		wp_enqueue_style(
+		'my-store-footer',
+		MY_STORE_URI . '/assets/css/footer.css',
+		array( 'my-store-style' ),
+		MY_STORE_VERSION
+	);
+
+	wp_enqueue_script(
+		'my-store-footer',
+		MY_STORE_URI . '/assets/js/footer.js',
+		array(),
+		MY_STORE_VERSION,
+		true
+	);
+
+	wp_localize_script(
+		'my-store-footer',
+		'msFooter',
+		array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'ms_subscribe' ),
+		)
 	);
 }
 add_action('wp_enqueue_scripts', 'my_store_assets');

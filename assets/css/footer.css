@@ -1,0 +1,464 @@
+/* ==========================================================================
+   Newsletter + footer widget
+   ========================================================================== */
+.ms-foot {
+  /* Defaults. Elementor controls override these. */
+  --ms-foot-bg: var(--ms-color-ink);
+  --ms-foot-text: #f6f2ec;
+  --ms-foot-accent: var(--ms-color-accent);
+  --ms-foot-btn-bg: #f6f2ec;
+  --ms-foot-btn-text: #1a1a1a;
+  --ms-foot-btn-hover-bg: var(--ms-color-accent);
+  --ms-foot-btn-hover-text: #ffffff;
+
+  /* Derived from the text color */
+  --ms-foot-muted: color-mix(in srgb, var(--ms-foot-text) 65%, transparent);
+  --ms-foot-line: color-mix(in srgb, var(--ms-foot-text) 16%, transparent);
+
+  /* Fixed by code, not editable in Elementor */
+  --ms-foot-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  overflow: hidden;
+  background: var(--ms-foot-bg);
+  color: var(--ms-foot-text);
+}
+
+/* Keep link colors inside the footer (beats the global a:hover) */
+.ms-foot a:hover {
+  color: var(--ms-foot-text);
+}
+
+/* ---------- Newsletter ---------- */
+.ms-foot__newsletter {
+  padding-block: var(--ms-space-xl);
+  border-bottom: 1px solid var(--ms-foot-line);
+}
+
+.ms-foot__nl-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--ms-space-lg);
+}
+
+.ms-foot__eyebrow {
+  margin-bottom: var(--ms-space-sm);
+  font-family: var(--ms-font-body);
+  font-size: 0.8125rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ms-foot-accent);
+}
+
+.ms-foot__nl-title {
+  max-width: 16ch;
+  margin-bottom: var(--ms-space-sm);
+  font-size: clamp(2rem, 3.6vw, 3.25rem);
+  color: inherit;
+}
+
+.ms-foot__nl-desc {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--ms-foot-muted);
+}
+
+/* Form */
+.ms-foot__row {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.ms-foot__field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+/* High specificity so Elementor's global form-field styles don't win */
+.ms-foot .ms-foot__field input.ms-foot__input[type="email"] {
+  display: block;
+  width: 100%;
+  padding: 16px 0;
+  border: 0;
+  border-bottom: 1px solid var(--ms-foot-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--ms-foot-text);
+  font-size: 1rem;
+  outline: 0;
+}
+
+.ms-foot .ms-foot__field input.ms-foot__input[type="email"]::placeholder {
+  color: var(--ms-foot-muted);
+  opacity: 1;
+}
+
+/* Accent line that draws in on focus */
+.ms-foot__field-line {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--ms-foot-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s var(--ms-foot-ease);
+}
+
+.ms-foot__field:focus-within .ms-foot__field-line {
+  transform: scaleX(1);
+}
+
+/* Honeypot: invisible to humans */
+.ms-foot__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* Button with sliding fill */
+.ms-foot button.ms-foot__submit {
+  position: relative;
+  z-index: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 16px 36px;
+  border: 0;
+  border-radius: 0;
+  background: var(--ms-foot-btn-bg);
+  box-shadow: none;
+  color: var(--ms-foot-btn-text);
+  font-size: 0.8125rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.35s ease, letter-spacing 0.35s ease, opacity 0.3s ease;
+}
+
+.ms-foot button.ms-foot__submit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ms-foot-btn-hover-bg);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ms-foot-ease);
+}
+
+.ms-foot button.ms-foot__submit:hover,
+.ms-foot button.ms-foot__submit:focus-visible {
+  background: var(--ms-foot-btn-bg);
+  color: var(--ms-foot-btn-hover-text);
+  letter-spacing: 0.18em;
+}
+
+.ms-foot button.ms-foot__submit:hover::before,
+.ms-foot button.ms-foot__submit:focus-visible::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.ms-foot button.ms-foot__submit.is-loading {
+  opacity: 0.55;
+  pointer-events: none;
+  animation: ms-foot-pulse 0.9s ease-in-out infinite;
+}
+
+@keyframes ms-foot-pulse {
+  50% { opacity: 0.3; }
+}
+
+/* Messages */
+.ms-foot__msg {
+  min-height: 1.5em;
+  margin: 12px 0 0;
+  font-size: 0.9375rem;
+  color: var(--ms-foot-muted);
+}
+
+.ms-foot__msg.is-error {
+  color: #f3a38a;
+}
+
+.ms-foot__msg.is-success {
+  color: var(--ms-foot-text);
+  animation: ms-foot-in 0.7s var(--ms-foot-ease);
+}
+
+/* Success: the input row steps aside and the message takes its place */
+.ms-foot__form.is-done .ms-foot__row {
+  display: none;
+}
+
+.ms-foot__form.is-done .ms-foot__msg {
+  margin: 0;
+  font-family: var(--ms-font-heading);
+  font-size: 1.75rem;
+  line-height: 1.3;
+}
+
+@keyframes ms-foot-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.ms-foot__note {
+  margin: 4px 0 0;
+  font-size: 0.8125rem;
+  color: var(--ms-foot-muted);
+}
+
+/* ---------- Main footer ---------- */
+.ms-foot__main {
+  padding-block: var(--ms-space-xl) var(--ms-space-lg);
+}
+
+.ms-foot__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+  gap: var(--ms-space-lg);
+}
+
+.ms-foot__logo-text {
+  margin: 0 0 var(--ms-space-sm);
+  font-family: var(--ms-font-heading);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.ms-foot__logo-img {
+  width: auto;
+  max-width: 160px;
+  height: auto;
+  margin-bottom: var(--ms-space-sm);
+}
+
+.ms-foot__desc {
+  max-width: 34ch;
+  margin-bottom: var(--ms-space-md);
+  color: var(--ms-foot-muted);
+}
+
+/* Social squares */
+.ms-foot__social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ms-foot__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--ms-foot-line);
+  font-size: 15px;
+  color: var(--ms-foot-text);
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.45s var(--ms-foot-ease);
+}
+
+.ms-foot__social-link svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+
+.ms-foot__social-link:hover {
+  border-color: var(--ms-foot-accent);
+  background: var(--ms-foot-accent);
+  color: var(--ms-foot-btn-hover-text);
+  transform: translateY(-4px);
+}
+
+/* Link columns */
+.ms-foot__col-title {
+  margin: 0 0 var(--ms-space-sm);
+  font-family: var(--ms-font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--ms-foot-text);
+}
+
+.ms-foot__links {
+  display: grid;
+  gap: 12px;
+}
+
+.ms-foot__link,
+.ms-foot__text {
+  color: var(--ms-foot-muted);
+}
+
+.ms-foot__link {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease, transform 0.45s var(--ms-foot-ease);
+}
+
+.ms-foot__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ms-foot-ease);
+}
+
+.ms-foot__link:hover {
+  color: var(--ms-foot-text);
+  transform: translateX(4px);
+}
+
+.ms-foot__link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ---------- Bottom bar ---------- */
+.ms-foot__bottom {
+  border-top: 1px solid var(--ms-foot-line);
+}
+
+.ms-foot__bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ms-space-sm) var(--ms-space-md);
+  padding-block: 24px;
+}
+
+.ms-foot__copy {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ms-foot-muted);
+}
+
+.ms-foot__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+}
+
+.ms-foot__legal a {
+  font-size: 0.875rem;
+  color: var(--ms-foot-muted);
+  transition: color 0.3s ease;
+}
+
+.ms-foot__legal a:hover {
+  color: var(--ms-foot-text);
+}
+
+/* ---------- Giant faded wordmark ---------- */
+.ms-foot__wordmark {
+  margin-top: var(--ms-space-md);
+  font-family: var(--ms-font-heading);
+  font-size: clamp(4rem, 17vw, 16rem);
+  font-weight: 600;
+  line-height: 0.78;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ms-foot-text);
+  opacity: 0.06;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* The shared reveal fades to full opacity; keep the wordmark faint */
+.ms-js .ms-foot__wordmark[data-ms-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 60px, 0);
+  transition:
+    opacity 1.4s ease,
+    transform 1.4s var(--ms-foot-ease);
+}
+
+.ms-js .ms-foot__wordmark[data-ms-reveal].is-visible {
+  opacity: 0.06;
+  transform: none;
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1024px) {
+  .ms-foot__newsletter {
+    padding-block: var(--ms-space-lg);
+  }
+
+  .ms-foot__nl-inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--ms-space-md);
+  }
+
+  .ms-foot__main {
+    padding-block: var(--ms-space-lg);
+  }
+
+  .ms-foot__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--ms-space-md);
+  }
+
+  .ms-foot__brand {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 767px) {
+  .ms-foot__row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .ms-foot button.ms-foot__submit {
+    width: 100%;
+  }
+
+  .ms-foot__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ms-foot__bottom-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ms-foot__wordmark {
+    margin-top: var(--ms-space-sm);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-foot *,
+  .ms-foot *::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}
